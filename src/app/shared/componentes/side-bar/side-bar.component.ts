@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TrackService } from '@modules/tracks/services/track.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -17,14 +18,18 @@ export class SideBarComponent implements OnInit {
 
 
 
-  constructor(private router:Router){}//para darle poderes de rutas le tengo que poner en aqui
+  constructor(private router:Router, private trackService:TrackService){}//para darle poderes de rutas le tengo que poner en aqui
+
+
+
+
 
   ngOnInit(): void {
     this.mainMenu.defaultOptions = [
       {
         name: 'Home',
         icon: 'uil uil-estate',
-        router: ['/'] //todo:htt//localhost:4200/
+        router: ['/','auth'] //todo:htt//localhost:4200/
       },
       {
         name: 'Buscar',
@@ -69,7 +74,23 @@ export class SideBarComponent implements OnInit {
       }
     ]
 
+ this.trackService.dataTracksRandom$.subscribe((response:any)=>{
+  console.log('---------->>>',response[0]);
+
+    this.customOptions.push({
+      name:response[0].name,
+      router:[]
+    })
+  })
+
+
   }
+
+
+
+
+
+
   goTo($event: any): void {
     this.router.navigate(['/', 'favorites'], {
       queryParams: {
